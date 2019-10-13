@@ -13,6 +13,13 @@ var connection = mysql.createConnection({
 if(connection){
     console.log(1);
 }
+
+var connection = mysql.createConnection({
+	host     : 'localhost',
+	user     : 'root',
+	password : 'root',
+    database : 'card'
+});
 var app = express();
 
 app.use(session({
