@@ -6,8 +6,8 @@ var path = require('path');
 
 var connection = mysql.createConnection({
 	host     : 'localhost',
-	user     : 'root',
-	password : 'root',
+	user     : 'debian-sys-maint',
+	password : 'FIqF87P8vUdUitPJ',
 	database : 'nodelogin'
 });
 if(connection){
