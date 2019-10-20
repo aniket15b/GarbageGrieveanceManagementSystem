@@ -5,11 +5,8 @@ var path = require('path');
 var PORT = process.env.PORT || 3000;
 const Pool = require('pg').Pool;
 const pool = new Pool({
-  user: 'me',
-  host: 'localhost',
-  database: 'api',
-  password: 'password',
-  port: PORT,
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
 });
 
 var app = express();
