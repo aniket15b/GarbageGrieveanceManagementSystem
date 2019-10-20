@@ -1,25 +1,17 @@
-var mysql = require('mysql');
 var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
-
-var connection = mysql.createConnection({
-	host     : 'localhost',
-	user     : 'debian-sys-maint',
-	password : 'FIqF87P8vUdUitPJ',
-	database : 'nodelogin'
+var PORT = process.env.PORT || 3000;
+const Pool = require('pg').Pool;
+const pool = new Pool({
+  user: 'me',
+  host: 'localhost',
+  database: 'api',
+  password: 'password',
+  port: PORT,
 });
-if(connection){
-    console.log(1);
-}
 
-var connection = mysql.createConnection({
-	host     : 'localhost',
-	user     : 'root',
-	password : 'root',
-    database : 'card'
-});
 var app = express();
 
 app.use(session({
@@ -38,7 +30,7 @@ app.post('/auth', function(request, response) {
 	var username = request.body.username;
     var password = request.body.password;
 	if (username && password) {
-		connection.query('SELECT * FROM accounts', function(error, results, fields) {
+		pool.query('SELECT * FROM accounts', function(error, results, fields) {
             if(results){
                 console.log(1);
                 if (results.length > 0) {
@@ -72,4 +64,4 @@ app.get('/home', function(request, response) {
 	response.end();
 });
 
-app.listen(3000);
+app.listen(PORT);
