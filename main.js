@@ -27,7 +27,7 @@ app.post('/auth', function(request, response) {
 	var username = request.body.username;
     var password = request.body.password;
 	if (username && password) {
-		pool.query('SELECT * FROM accounts', function(error, results, fields) {
+		pool.query('SELECT * FROM accounts', function(error, results) {
             if(results){
                 console.log(1);
                 if (results.length > 0) {
