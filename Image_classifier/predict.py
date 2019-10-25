@@ -1,4 +1,4 @@
-import cv2
+import cv2, os
 import numpy as np
 import tensorflow as tf
 CATEGORIES = ["garbage","not_garbage"]
@@ -9,13 +9,10 @@ def prepare(file):
     img_array = cv2.imread(file, cv2.IMREAD_GRAYSCALE)
     new_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
     return new_array.reshape(-1, IMG_SIZE, IMG_SIZE, 1)
-model = tf.keras.models.load_model("CNN.model")
-image = "test.jpg" #your image path
-image = cv2.imread(image,cv2.IMREAD_GRAYSCALE)
-image = cv2.resize(image, (100,100))
-a = [image]
-a = np.array(a).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+model = tf.keras.models.load_model("/home/aniket/GarbageGrieveanceManagementSystem/Image_classifier/CNN.model")
+image = "/home/aniket/GarbageGrieveanceManagementSystem/Images/"+os.listdir("/home/aniket/GarbageGrieveanceManagementSystem/Images")[0]
+a = prepare(image)
 prediction = model.predict(a)
-print(prediction)
 prediction = prediction[0]
+print(prediction[0])
 

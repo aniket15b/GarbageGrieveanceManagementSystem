@@ -71,45 +71,56 @@ span.psw {
 }
 </style>
 </head>
-<body>
+<body onload="getLocation()">
 
-<h2 style="align:center">Welcome !!</h2>
+<h2>Welcome !!</h2>
 
-<form action="/action_page.php" method="post">
+<form action="/grievance" method="post" enctype="multipart/form-data">
   <div class="container">
     <label for="img1" required><b>Upload img:</b></label>
     <input type="file"
        id="img1" name="img1"
        accept="image/png, image/jpeg">
-       <br>
-       <br>
-
-    <label for="startTime"><b>Time of the day: </b></label>
-    <input type="time" id="startTime">
     <br>
     <br>
 
-    <label for="location"><b>Location :</b></label>
-    <input type="comment" placeholder="Enter location" name="comment" required>
-    <br>
-    <br>
+    <input type="hidden" readonly name="time" id="time">
 
-    <label for="img1"><b>Upload nearby landmark image:</b></label>
-    <input type="file"
-       id="img1" name="img1"
-       accept="image/png, image/jpeg">
-       <br>
-       <br>
+    <label for="locationx"><b>Location :</b></label>
+    <input type="text" name="locationx" id="locationx" readonly>
+    <input type="text" name="locationy" id="locationy" readonly>
+    <br>
+    <br>
 
     <label for="comment"><b>Comments :</b></label>
     <input type="comment" placeholder="Enter Comments" name="comment" required>
         
-    <button type="submit">Submit</button>
-    
+    <button type="submit" id="submit" disabled>Submit</button>
   </div>
 
-  
 </form>
 
 </body>
+<script>
+  var x = document.getElementById("locationx");
+  var y = document.getElementById("locationy");
+  var time = document.getElementById("time");
+  var today = new Date();
+  var t = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  time.value = t;
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      x.value = "0";
+      y.value = "0";
+    }
+  }
+  
+  function showPosition(position) {
+    x.value = position.coords.latitude;
+    y.value = position.coords.longitude;
+    document.getElementById("submit").disabled=false;
+  }
+  </script> 
 </html>
