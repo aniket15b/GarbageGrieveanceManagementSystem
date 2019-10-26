@@ -4,6 +4,7 @@ var multer = require('multer');
 var bodyParser = require('body-parser');
 var path = require('path');
 var PORT = process.env.PORT || 3000;
+var cors = require('cors');
 const rimraf = require('rimraf');
 
 var Storage = multer.diskStorage({
@@ -54,6 +55,7 @@ app.use(session({
 }));
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get('/', function(req, res){
   if(req.session.loggedin){
@@ -139,13 +141,47 @@ app.post('/grievance',upload, function(req, res) {
         }
     });
     pyProg.stderr.on('data', function(data) {
-      // console.log(data.toString());
+      console.log(data.toString());
     });
     setTimeout(() => {
       rimraf('./Images/*', function () { console.log('done'); });
-    }, 6000);
+    }, 10000);
   } else{
     console.log(1);
+  }
+});
+
+app.get('/data',function(req,res){
+  if(req.session.loggedin){
+    if(req.params.user == 'ALL'){
+      pool.query('SELECT * FROM locations;',function(err,results){
+        if (err){
+          console.log(err);
+          res.header('Access-Control-Allow-Origin', '*');
+          res.header(
+              'Access-Control-Allow-Headers',
+              'Origin, X-Requested-With, Content-Type, Accept'
+          );  
+          res.send("Some error occurred");
+        } else {
+          res.header('Access-Control-Allow-Origin', '*');
+          res.header(
+              'Access-Control-Allow-Headers',
+              'Origin, X-Requested-With, Content-Type, Accept'
+          );
+          res.send(results);
+        }
+      });
+    } else {
+      pool.query('SELECT * FROM locations WHERE userid=$1;',[req.session.username],function(err,results){
+        if(err){
+          console.log(err);
+          res.send("Some error occurred");
+        } else {
+          res.send(results);
+        }
+      });
+    }
   }
 });
 

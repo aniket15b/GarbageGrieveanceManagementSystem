@@ -78,7 +78,20 @@ span.psw {
 
 <h2>View Summary</h2>
 
-
+<select name="users" id="user" onchange="change()">
+  <option value="ALL" selected>ALL</option>
+  <option value="Me">Me</option>
+</select>
 
 </body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+function change(){
+  const url = "http://" + window.location.host + "/data";
+  const params = {
+    user: document.getElementById('user').value
+  }
+  axios.get(url,params).then(data => console.log(data)).catch(err => console.log(err));
+}
+</script>
 </html>
