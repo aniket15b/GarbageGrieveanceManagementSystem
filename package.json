@@ -11,7 +11,9 @@
     "pg": "^7.12.1",
     "rimraf": "^3.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "express-session": "^1.17.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
