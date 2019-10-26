@@ -1,22 +1,20 @@
 {
-  "name": "(ggms)",
+  "name": "ggms",
   "version": "1.0.0",
   "description": "A street garbage grievance management system made for the HacknCode 3.0 Provides a simple dashboard for users to upload grievances with an image and the location. Analyses the data and provides useful heatmaps and graphs. Still a work under progress.",
   "main": "main.js",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-session": "^1.17.0",
     "multer": "^1.4.2",
     "path": "^0.12.7",
     "pg": "^7.12.1",
     "rimraf": "^3.0.0"
   },
-  "devDependencies": {
-    "express-session": "^1.17.0"
-  },
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node main.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
