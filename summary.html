@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+crossorigin=""></script>
+<script src="https://unpkg.com/heatmap.js@2.0.5"></script>
+<script src="https://unpkg.com/leaflet-heatmap@1.0.0"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
    h2   {color: green;
@@ -72,6 +80,7 @@ span.psw {
      width: 100%;
   }
 }
+#map { height: 400px; }
 </style>
 </head>
 <body>
@@ -83,15 +92,58 @@ span.psw {
   <option value="Me">Me</option>
 </select>
 
+<div id="map"></div>
+
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-function change(){
+function change(cb){
   const url = "http://" + window.location.host + "/data";
   const params = {
     user: document.getElementById('user').value
   }
-  axios.get(url,params).then(data => console.log(data)).catch(err => console.log(err));
+  axios.get(url,params).then(
+    data => {
+      cb(data);
+    }
+    ).catch(err => console.log(err));
 }
+</script>
+<script>
+  var baseLayer = L.tileLayer(
+  'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    subdomains: ['a','b','c']
+  }
+  );
+  var cfg = {
+    // scales the radius based on map zoom
+    "scaleRadius": true,
+    // if set to false the heatmap uses the global maximum for colorization
+    // if activated: uses the data maximum within the current map boundaries
+    //   (there will always be a red spot with useLocalExtremas true)
+    "useLocalExtrema": true,
+    // which field name in your data represents the latitude - default "lat"
+    latField: 'locationx',
+    // which field name in your data represents the longitude - default "lng"
+    lngField: 'locationy',
+    // which field name in your data represents the data value - default "value"
+    valueField: 'count'
+  };
+  var heatmapLayer = new HeatmapOverlay(cfg);
+  var map = new L.Map('map', {
+    center: new L.LatLng(18.630098, 73.777889),
+    zoom: 12.5,
+    layers: [baseLayer, heatmapLayer]
+  });
+  map.on('click', function(e) {
+    console.log("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
+  });
+  function callb(data){
+    testData = {
+      data: data
+    }
+    heatmapLayer.setData(testData);
+  }
 </script>
 </html>

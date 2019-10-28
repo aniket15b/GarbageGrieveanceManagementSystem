@@ -39,6 +39,7 @@ if(process.env.DATABASE_URL == null){
     password: 'aniketab',
     port: 5432,
   });
+  
 } else {
   pool = new Pool({  //deployed
     connectionString: process.env.DATABASE_URL,
@@ -151,9 +152,13 @@ app.post('/grievance',upload, function(req, res) {
   }
 });
 
+app.get('/summary',function(req,res){
+  res.sendFile(path.join(__dirname+'/summary.html'));
+});
+
 app.get('/data',function(req,res){
-  if(req.session.loggedin){
-    if(req.params.user == 'ALL'){
+  if(req.session.loggedin || true){
+    if(req.params.user != 'Me'){
       pool.query('SELECT * FROM locations;',function(err,results){
         if (err){
           console.log(err);
