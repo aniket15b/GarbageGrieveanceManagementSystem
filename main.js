@@ -10,8 +10,8 @@ const rimraf = require('rimraf');
 var Storage = multer.diskStorage({
 
   destination: function(req, file, callback) {
-
-      callback(null, __dirname + "/Images");
+      console.log(1)
+      callback(null, path.join(__dirname + "/Images"));
 
   },
 
