@@ -159,24 +159,84 @@ app.get('/summary',function(req,res){
 app.get('/data',function(req,res){
   if(req.session.loggedin || true){
     if(req.params.user != 'Me'){
-      pool.query('SELECT * FROM locations;',function(err,results){
-        if (err){
-          console.log(err);
-          res.header('Access-Control-Allow-Origin', '*');
-          res.header(
-              'Access-Control-Allow-Headers',
-              'Origin, X-Requested-With, Content-Type, Accept'
-          );  
-          res.send("Some error occurred");
-        } else {
-          res.header('Access-Control-Allow-Origin', '*');
-          res.header(
-              'Access-Control-Allow-Headers',
-              'Origin, X-Requested-With, Content-Type, Accept'
-          );
-          res.send(results);
-        }
-      });
+      if(req.params.time == 'ALL'){
+        pool.query('SELECT * FROM locations;',function(err,results){
+          if (err){
+            console.log(err);
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header(
+                'Access-Control-Allow-Headers',
+                'Origin, X-Requested-With, Content-Type, Accept'
+            );  
+            res.send("Some error occurred");
+          } else {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header(
+                'Access-Control-Allow-Headers',
+                'Origin, X-Requested-With, Content-Type, Accept'
+            );
+            res.send(results);
+          }
+        });
+      } else if(req.params.time == 'Morning'){
+        pool.query('SELECT * FROM locations WHERE time < "12:00:00";',function(err,results){
+          if (err){
+            console.log(err);
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header(
+                'Access-Control-Allow-Headers',
+                'Origin, X-Requested-With, Content-Type, Accept'
+            );  
+            res.send("Some error occurred");
+          } else {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header(
+                'Access-Control-Allow-Headers',
+                'Origin, X-Requested-With, Content-Type, Accept'
+            );
+            res.send(results);
+          }
+        });
+      } else if(req.params.time == "Afternoon"){
+        pool.query('SELECT * FROM locations WHERE time < "18:00:00";',function(err,results){
+          if (err){
+            console.log(err);
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header(
+                'Access-Control-Allow-Headers',
+                'Origin, X-Requested-With, Content-Type, Accept'
+            );  
+            res.send("Some error occurred");
+          } else {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header(
+                'Access-Control-Allow-Headers',
+                'Origin, X-Requested-With, Content-Type, Accept'
+            );
+            res.send(results);
+          }
+        });
+      } else {
+        pool.query('SELECT * FROM locations WHERE time > "18:00:00";',function(err,results){
+          if (err){
+            console.log(err);
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header(
+                'Access-Control-Allow-Headers',
+                'Origin, X-Requested-With, Content-Type, Accept'
+            );  
+            res.send("Some error occurred");
+          } else {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header(
+                'Access-Control-Allow-Headers',
+                'Origin, X-Requested-With, Content-Type, Accept'
+            );
+            res.send(results);
+          }
+        });
+      }
+      
     } else {
       pool.query('SELECT * FROM locations WHERE userid=$1;',[req.session.username],function(err,results){
         if(err){

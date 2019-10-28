@@ -87,9 +87,16 @@ span.psw {
 
 <h2>View Summary</h2>
 
-<select name="users" id="user" onchange="change()">
+<select name="users" id="user" onchange="change(callb)">
   <option value="ALL" selected>ALL</option>
   <option value="Me">Me</option>
+</select>
+
+<select name="time" id="time" onchange="change(callb)">
+  <option value="ALL" selected>ALL</option>
+  <option value="Morning">Morning</option>
+  <option value="Afternoon" selected>Afternoon</option>
+  <option value="Night">Night</option>
 </select>
 
 <div id="map"></div>
@@ -97,17 +104,18 @@ span.psw {
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-function change(cb){
-  const url = "http://" + window.location.host + "/data";
-  const params = {
-    user: document.getElementById('user').value
-  }
-  axios.get(url,params).then(
-    data => {
-      cb(data);
+  function change(cb){
+    const url = "http://" + window.location.host + "/data";
+    const params = {
+      user: document.getElementById('user').value,
+      time: document.getElementById('time').value
     }
-    ).catch(err => console.log(err));
-}
+    axios.get(url,params).then(
+      data => {
+        cb(data);
+      }
+      ).catch(err => console.log(err));
+  }
 </script>
 <script>
   var baseLayer = L.tileLayer(
