@@ -10,7 +10,7 @@ const rimraf = require('rimraf');
 var Storage = multer.diskStorage({
 
   destination: function(req, file, callback) {
-      console.log(1)
+      // console.log(1)
       callback(null, path.join(__dirname + "/Images"));
 
   },
@@ -114,16 +114,16 @@ app.post('/grievance',upload, function(req, res) {
   if(locationx == "0" || locationy == "0"){
     res.send("Geolocation not supported. Use a different browser");
   }
-  if(parseFloat(locationy) <= 72.6466326489 || parseFloat(locationy) >= 73.2453875317){
-    console.log(locationy);
-    res.send("Location unsupported");
-  }
-  else{
-    if(parseFloat(locationx) >= 19.4998677114 || parseFloat(locationx) <= 18.89395652){
-      res.send("Location unsupported");
-      console.log(locationy);
-    }
-  }
+  // if(parseFloat(locationy) <= 72.6466326489 || parseFloat(locationy) >= 73.2453875317){
+    // console.log(locationy);
+    // res.send("Location unsupported");
+  // }
+  // else{
+    // if(parseFloat(locationx) >= 19.4998677114 || parseFloat(locationx) <= 18.89395652){
+      // res.send("Location unsupported");
+      // console.log(locationy);
+    // }
+  // }
   if(req.file){
     const { spawn } = require('child_process');
     const pyProg = spawn('python', ['./Image_classifier/predict.py']);
