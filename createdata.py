@@ -3,7 +3,7 @@ import csv
 lists = []
 for i in range(1000):
     
-    l = [ str(random.uniform(18.89395652,19.4998677114)), str(random.uniform(73.2453875317,72.6466326489)), chr(random.randrange(97, 97 + 26)), str(random.randrange(00,23,1))+':'+str(random.randrange(00,59,1))+':'+str(random.randrange(00,59,1)), 1]
+    l = [ str(random.uniform(18.89395652,19.4998677114)), str(random.uniform(73.2453875317,72.6466326489)), chr(random.randrange(97, 97 + 26)), '{0:02d}'.format(random.randrange(00,23,1))+':'+'{0:02d}'.format(random.randrange(00,59,1))+':'+'{0:02d}'.format(random.randrange(00,59,1)), 1]
     lists.append(l)
 
 

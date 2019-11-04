@@ -10,6 +10,7 @@ crossorigin=""></script>
 <script src="https://unpkg.com/heatmap.js@2.0.5"></script>
 <script src="https://unpkg.com/leaflet-heatmap@1.0.0"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="tabs.css" type="text/css">
 <style>
    h2   {color: green;
       align-items : center;
@@ -83,7 +84,12 @@ span.psw {
 #map { height: 400px; }
 </style>
 </head>
-<body>
+<body onload="getLocation()">
+<!-- Tab links -->
+<div class="tab">
+  <button class="tablinks" onclick="">Summary</button>
+  <button class="tablinks" onclick="window.location.replace(window.location.origin + '/grievance')">Submit Grievance</button>
+</div>
 
 <h2>View Summary</h2>
 
@@ -105,12 +111,14 @@ span.psw {
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
   function change(cb){
+    console.log("cb called inside change")
     const url = "http://" + window.location.host + "/data";
     const params = {
       user: document.getElementById('user').value,
       time: document.getElementById('time').value
     }
-    axios.get(url,params).then(
+    console.log("TIME "+params.time);
+    axios.get(url+'?time='+params.time+'&user='+params.user).then(
       data => {
         cb(data);
       }
@@ -118,6 +126,31 @@ span.psw {
   }
 </script>
 <script>
+  var map;
+
+  function getLocation() {
+    var x = "1";
+    var y = "1";
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      x = "0";
+      y = "0";
+    }
+  }
+  
+  function showPosition(position) {
+    x = position.coords.latitude;
+    y = position.coords.longitude;
+    map = new L.Map('map', {
+      center: new L.LatLng(parseFloat(x), parseFloat(y)),
+      zoom: 12.5,
+      layers: [baseLayer, heatmapLayer]
+    });
+  }
+
+
   var baseLayer = L.tileLayer(
   'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -139,19 +172,14 @@ span.psw {
     valueField: 'count'
   };
   var heatmapLayer = new HeatmapOverlay(cfg);
-  var map = new L.Map('map', {
-    center: new L.LatLng(18.630098, 73.777889),
-    zoom: 12.5,
-    layers: [baseLayer, heatmapLayer]
-  });
-  map.on('click', function(e) {
-    console.log("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
-  });
+  
   function callb(data){
-    testData = {
-      data: data
+    console.log("Inside cb now");
+    d = {
+      data: data.data.rows
     }
-    heatmapLayer.setData(testData);
+    heatmapLayer.setData(d);
+    console.log(d);
   }
 </script>
 </html>
